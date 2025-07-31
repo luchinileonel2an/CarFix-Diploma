@@ -77,6 +77,21 @@ namespace Controladora
             if (ticketExistente == null)
                 throw new Exception("El ticket no existe en la base de datos.");
 
+            if (ticketExistente.Descripcion != descripcion)
+            {
+                var historial = new HistorialDescripcion
+                {
+                    TicketId = id,
+                    DescripcionAnterior = ticketExistente.Descripcion,
+                    DescripcionNueva = descripcion,
+                    FechaCambio = DateTime.Now,
+                    Usuario = ControladoraSeguridad.Instancia.UsuarioActual?.NombreUsuario ?? "Sistema",
+                    Motivo = "Modificación de ticket"
+                };
+
+                context.HistorialesDescripciones.Add(historial);
+            }
+
             // AUDITORÍA: Capturar estado anterior
             var ticketAnterior = new Ticket
             {
@@ -107,6 +122,13 @@ namespace Controladora
             {
                 // Si falla la auditoría, no afecta la operación principal
             }
+        }
+        public List<HistorialDescripcion> ObtenerHistorialDescripciones(int ticketId)
+        {
+            return context.HistorialesDescripciones
+                .Where(h => h.TicketId == ticketId)
+                .OrderByDescending(h => h.FechaCambio)
+                .ToList();
         }
 
         public string EliminarTicket(int id, string motivo = "")

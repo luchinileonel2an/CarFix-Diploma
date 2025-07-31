@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Modelo;
 
@@ -11,9 +12,11 @@ using Modelo;
 namespace Modelo.Migrations
 {
     [DbContext(typeof(Context))]
-    partial class ContextModelSnapshot : ModelSnapshot
+    [Migration("20250730214122_Historial Descripciones")]
+    partial class HistorialDescripciones
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -491,20 +494,6 @@ namespace Modelo.Migrations
                             Descripcion = "Crear productos",
                             Modulo = "Compras",
                             Nombre = "PRODUCTOS_CREAR"
-                        },
-                        new
-                        {
-                            Id = 28,
-                            Descripcion = "Modificar cliente en tickets",
-                            Modulo = "Tickets",
-                            Nombre = "TICKETS_MODIFICAR_CLIENTE"
-                        },
-                        new
-                        {
-                            Id = 29,
-                            Descripcion = "Modificar vehículo en tickets",
-                            Modulo = "Tickets",
-                            Nombre = "TICKETS_MODIFICAR_VEHICULO"
                         });
                 });
 
@@ -1156,16 +1145,6 @@ namespace Modelo.Migrations
                         },
                         new
                         {
-                            GruposId = 1,
-                            PermisosId = 28
-                        },
-                        new
-                        {
-                            GruposId = 1,
-                            PermisosId = 29
-                        },
-                        new
-                        {
                             GruposId = 3,
                             PermisosId = 13
                         },
@@ -1243,16 +1222,6 @@ namespace Modelo.Migrations
                         {
                             GruposId = 2,
                             PermisosId = 16
-                        },
-                        new
-                        {
-                            GruposId = 2,
-                            PermisosId = 28
-                        },
-                        new
-                        {
-                            GruposId = 2,
-                            PermisosId = 29
                         });
                 });
 

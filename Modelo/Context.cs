@@ -23,6 +23,8 @@ namespace Modelo
         public DbSet<AuditoriaOrdenesCompra> AuditoriasOrdenesCompra { get; set; }
         public DbSet<AuditoriaTickets> AuditoriasTickets { get; set; }
 
+        public DbSet<HistorialDescripcion> HistorialesDescripciones { get; set; }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;initial catalog=DBCarFix;Integrated Security=SSPI;").EnableSensitiveDataLogging();
@@ -95,7 +97,9 @@ namespace Modelo
                 new Permiso { Id = 24, Nombre = "PROVEEDORES_VER", Descripcion = "Ver proveedores", Modulo = "Compras" },
                 new Permiso { Id = 25, Nombre = "PROVEEDORES_CREAR", Descripcion = "Crear proveedores", Modulo = "Compras" },
                 new Permiso { Id = 26, Nombre = "PRODUCTOS_VER", Descripcion = "Ver productos", Modulo = "Compras" },
-                new Permiso { Id = 27, Nombre = "PRODUCTOS_CREAR", Descripcion = "Crear productos", Modulo = "Compras" }
+                new Permiso { Id = 27, Nombre = "PRODUCTOS_CREAR", Descripcion = "Crear productos", Modulo = "Compras" },
+                new Permiso { Id = 28, Nombre = "TICKETS_MODIFICAR_CLIENTE", Descripcion = "Modificar cliente en tickets", Modulo = "Tickets" },
+                new Permiso { Id = 29, Nombre = "TICKETS_MODIFICAR_VEHICULO", Descripcion = "Modificar vehículo en tickets", Modulo = "Tickets" }
             };
             modelBuilder.Entity<Permiso>().HasData(permisos);
 
@@ -127,7 +131,9 @@ namespace Modelo
                 new { GruposId = 1, PermisosId = 24 },  // PROVEEDORES_VER
                 new { GruposId = 1, PermisosId = 25 },  // PROVEEDORES_CREAR
                 new { GruposId = 1, PermisosId = 26 },  // PRODUCTOS_VER
-                new { GruposId = 1, PermisosId = 27 }   // PRODUCTOS_CREAR
+                new { GruposId = 1, PermisosId = 27 },  // PRODUCTOS_CREAR
+                new { GruposId = 1, PermisosId = 28 }, // TICKETS_MODIFICAR_CLIENTES
+                new { GruposId = 1, PermisosId = 29 }, // TICKETS_MODIFICAR_VEHICULOS
             };
 
             modelBuilder.Entity("GrupoPermisos").HasData(adminPermisos);
@@ -155,7 +161,9 @@ namespace Modelo
                 new { GruposId = 2, PermisosId = 13 },  // TICKETS_VER
                 new { GruposId = 2, PermisosId = 14 },  // TICKETS_CREAR
                 new { GruposId = 2, PermisosId = 15 },  // TICKETS_EDITAR
-                new { GruposId = 2, PermisosId = 16 }   // TICKETS_ELIMINAR
+                new { GruposId = 2, PermisosId = 16 },  // TICKETS_ELIMINAR
+                new { GruposId = 2, PermisosId = 28 }, // TICKETS_MODIFICAR_CLIENTES
+                new { GruposId = 2, PermisosId = 29 }, // TICKETS_MODIFICAR_VEHICULOS
             };
 
             modelBuilder.Entity("GrupoPermisos").HasData(permisosOperadores);
@@ -278,6 +286,18 @@ namespace Modelo
             modelBuilder.Entity<AuditoriaTickets>()
                 .Property(a => a.Observaciones)
                 .HasMaxLength(500);
+
+            modelBuilder.Entity<HistorialDescripcion>()
+                .HasOne(h => h.Ticket)
+                .WithMany()
+                .HasForeignKey(h => h.TicketId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<HistorialDescripcion>()
+                .HasIndex(h => h.TicketId);
+
+            modelBuilder.Entity<HistorialDescripcion>()
+                .HasIndex(h => h.FechaCambio);
 
             // Usuario administrador
             var adminUser = new Usuario

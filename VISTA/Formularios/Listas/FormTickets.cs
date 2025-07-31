@@ -1,6 +1,7 @@
 ﻿using Controladora;
 using Entidades.Tickets;
 using Vista.Patrones;
+using Vista.Formularios.Datos;
 
 namespace Vista
 {

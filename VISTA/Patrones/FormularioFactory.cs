@@ -1,4 +1,6 @@
-﻿namespace Vista.Patrones
+﻿using Vista.Formularios.Datos;
+
+namespace Vista.Patrones
 {
     public abstract class FormularioFactory
     {
